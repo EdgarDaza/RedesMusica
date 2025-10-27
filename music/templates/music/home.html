@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicaPalBody - All Music</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 25%, #f7931e 50%, #ffa500 75%, #ff8c42 100%);
+            background-attachment: fixed;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Silhouette figures effect */
+        body::before {
+            content: '';
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.15) 0%, transparent 70%);
+            filter: blur(40px);
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.15) 0%, transparent 70%);
+            filter: blur(40px);
+            z-index: 0;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            padding: 25px 20px;
+            height: 100vh;
+            position: fixed;
+            overflow-y: auto;
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 10;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #000;
+            display: flex;
+            align-items: center;
+        }
+
+        .all-music-subtitle {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 28px;
+        }
+
+        .nav-section {
+            margin-bottom: 30px;
+        }
+
+        .nav-title {
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-item.active {
+            background: rgba(0, 0, 0, 0.1);
+            color: #000;
+            font-weight: 600;
+        }
+
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 18px;
+            color: #000;
+        }
+
+        .playlist-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000;
+        }
+
+        .playlist-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .playlist-item.active {
+            background: rgba(0, 0, 0, 0.1);
+            color: #000;
+        }
+
+        .playlist-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 18px;
+        }
+
+        .playlist-info h4 {
+            font-size: 14px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .playlist-info p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            min-height: 100vh;
+            border-radius: 20px 0 0 0;
+            z-index: 9;
+            margin-right: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 25px;
+            padding: 10px 20px;
+            width: 300px;
+        }
+
+        .search-bar i {
+            margin-right: 10px;
+            color: #666;
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: #000;
+            width: 100%;
+            outline: none;
+        }
+
+        .search-bar input::placeholder {
+            color: #666;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-actions i {
+            font-size: 20px;
+            margin-left: 20px;
+            cursor: pointer;
+            color: #000;
+        }
+
+        .user-profile {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f72585, #7209b7);
+            margin-left: 20px;
+            cursor: pointer;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .section-title i {
+            margin-right: 10px;
+            color: #000;
+        }
+
+        .playlist-count {
+            font-size: 14px;
+            color: #666;
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
+        .song-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .song-card {
+            background: transparent;
+            border-radius: 12px;
+            padding: 0;
+            display: block;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .song-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .song-cover {
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            overflow: hidden;
+        }
+
+        .song-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song-info h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .song-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .now-playing {
+            position: fixed;
+            bottom: 0;
+            left: 250px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 100;
+        }
+
+        .now-playing-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .now-playing-cover {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #f72585, #7209b7);
+            margin-right: 15px;
+        }
+
+        .now-playing-text h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #000;
+            font-weight: 600;
+        }
+
+        .now-playing-text p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .player-controls i {
+            font-size: 20px;
+            margin: 0 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #000;
+        }
+
+        .player-controls i:hover {
+            transform: scale(1.2);
+        }
+
+        .player-controls .play-pause {
+            font-size: 36px;
+        }
+
+        .progress-controls {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: center;
+        }
+
+        .progress-bar {
+            width: 400px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+            position: relative;
+            margin: 0 15px;
+            cursor: pointer;
+        }
+
+        .progress {
+            width: 42%;
+            height: 100%;
+            background: #000;
+            border-radius: 2px;
+        }
+
+        .time {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .volume-controls {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .volume-controls i {
+            font-size: 18px;
+            margin-right: 10px;
+            color: #000;
+        }
+
+        .volume-bar {
+            width: 100px;
+            height: 4px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .volume-level {
+            width: 70%;
+            height: 100%;
+            background: #000;
+            border-radius: 2px;
+        }
+
+        /* Additional styles for better layout */
+        .nav-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-item i:first-child {
+            margin-right: 10px;
+        }
+
+        .nav-item i.fa-chevron-down {
+            margin-left: auto;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content {
+                margin-left: 200px;
+            }
+            .now-playing {
+                left: 200px;
+            }
+            .song-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 100;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+                border-radius: 0;
+            }
+            .now-playing {
+                left: 0;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .song-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="logo">
+            <i class="fas fa-music"></i>
+            MusicaPalBody
+        </div>
+        <div class="all-music-subtitle">All Music</div>
+        
+        <div class="nav-section">
+            <div class="nav-item active">
+                <i class="fas fa-clock"></i>
+                Recently Added
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-microphone"></i>
+                Artist
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-compact-disc"></i>
+                Albums
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-music"></i>
+                Songs
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-user"></i>
+                Made for You
+            </div>
+            <div class="nav-item">
+                <i class="fas fa-list"></i>
+                Playlist
+                <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
+            </div>
+        </div>
+        
+        <div class="nav-section">
+            <div class="nav-title">Playlist</div>
+            <div class="playlist-item active">
+                <div class="playlist-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="playlist-info">
+                    <h4>All Playlists</h4>
+                    <p>304 Playlist</p>
+                </div>
+            </div>
+            <div class="playlist-item">
+                <div class="playlist-icon">
+                    <i class="fas fa-headphones"></i>
+                </div>
+                <div class="playlist-info">
+                    <h4>Good Vibes Only</h4>
+                    <p>120 songs</p>
+                </div>
+            </div>
+            <div class="playlist-item">
+                <div class="playlist-icon">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="playlist-info">
+                    <h4>Indie Anthems</h4>
+                    <p>85 songs</p>
+                </div>
+            </div>
+            <div class="playlist-item">
+                <div class="playlist-icon">
+                    <i class="fas fa-plus"></i>
+                </div>
+                <div class="playlist-info">
+                    <h4>Add Playlist</h4>
+                    <p>Create new</p>
+                </div>
+            </div>
+        </div>
+        
+        <div style="padding-top: 20px; text-align: center;">
+            <i class="fas fa-search" style="font-size: 18px; color: #000;"></i>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <main class="main-content" role="main">
+        <div class="header">
+            <div></div>
+            <div class="user-actions">
+                <i class="fas fa-bars" style="font-size: 20px;"></i>
+            </div>
+        </div>
+        
+        <div class="section-title">
+            Playlist
+            <span class="playlist-count">304 Playlist</span>
+        </div>
+        
+        <div class="search-bar" style="margin-bottom: 30px;">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Search in Albums">
+        </div>
+        
+        <div class="song-list">
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>Narcisista</h4>
+                    <p>The Warning</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>Colgando En Tus Manos</h4>
+                    <p>Carlos Baute, Marta Sánchez</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>Sympathy For The Devil</h4>
+                    <p>The Rolling Stones</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>La Vida Es Un Carnaval</h4>
+                    <p>Celia Cruz</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>Redlight</h4>
+                    <p>Swedish House Mafia & Sting</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>Stateside With Zara Larsson</h4>
+                    <p>PinkPantheress</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>Jupiter</h4>
+                    <p>The Marias</p>
+                </div>
+            </div>
+            
+            <div class="song-card">
+                <div class="song-cover">
+                    <i class="fas fa-music"></i>
+                </div>
+                <div class="song-info">
+                    <h4>From The Inside</h4>
+                    <p>Linkin Park</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Now Playing Bar -->
+    <div class="now-playing">
+        <div class="now-playing-info">
+            <div class="now-playing-cover"></div>
+            <div class="now-playing-text">
+                <h4>Vuelves</h4>
+                <p>Juanes</p>
+            </div>
+        </div>
+        
+        <div class="player-controls">
+            <i class="fas fa-random" aria-hidden="true"></i>
+            <i class="fas fa-step-backward" aria-hidden="true"></i>
+            <i class="fas fa-play-circle play-pause" role="button" aria-pressed="false" aria-label="Play" tabindex="0"></i>
+            <i class="fas fa-step-forward" aria-hidden="true"></i>
+            <i class="fas fa-redo" aria-hidden="true"></i>
+        </div>
+        
+        <div class="progress-controls">
+            <span class="time">1:42</span>
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <span class="time">4:00</span>
+        </div>
+        
+        <div class="volume-controls">
+            <i class="fas fa-volume-up"></i>
+            <div class="volume-bar">
+                <div class="volume-level"></div>
+            </div>
+            <i class="fas fa-expand-arrows-alt" style="margin-left: 10px; cursor: pointer;"></i>
+        </div>
+    </div>
+
+    <script>
+        // Make scripts run after DOM is ready and add accessibility improvements
+        document.addEventListener('DOMContentLoaded', function () {
+            // Toggle play/pause button (with ARIA and keyboard support)
+            const playPauseBtn = document.querySelector('.play-pause');
+            if (playPauseBtn) {
+                const togglePlay = function () {
+                    if (playPauseBtn.classList.contains('fa-play-circle')) {
+                        playPauseBtn.classList.remove('fa-play-circle');
+                        playPauseBtn.classList.add('fa-pause-circle');
+                        playPauseBtn.setAttribute('aria-pressed', 'true');
+                        playPauseBtn.setAttribute('aria-label', 'Pause');
+                    } else {
+                        playPauseBtn.classList.remove('fa-pause-circle');
+                        playPauseBtn.classList.add('fa-play-circle');
+                        playPauseBtn.setAttribute('aria-pressed', 'false');
+                        playPauseBtn.setAttribute('aria-label', 'Play');
+                    }
+                };
+
+                playPauseBtn.addEventListener('click', togglePlay);
+                // Keyboard support (Space and Enter)
+                playPauseBtn.addEventListener('keydown', function (e) {
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        togglePlay();
+                    }
+                });
+            }
+
+            // Add active state to playlist items (if any)
+            const playlistItems = document.querySelectorAll('.playlist-item');
+            if (playlistItems && playlistItems.length) {
+                playlistItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        playlistItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+            }
+
+            // Add active state to nav items (if any)
+            const navItems = document.querySelectorAll('.nav-item');
+            if (navItems && navItems.length) {
+                navItems.forEach(item => {
+                    item.addEventListener('click', function() {
+                        navItems.forEach(i => i.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+            }
+
+            // Set decorative icons to aria-hidden unless they are interactive or explicitly labeled
+            document.querySelectorAll('i:not([role="button"]):not([aria-label])').forEach(function(el) {
+                el.setAttribute('aria-hidden', 'true');
+            });
+        });
+    </script>
+</body>
+</html>
+</html>
