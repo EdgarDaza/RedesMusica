@@ -5,6 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MusicaPalBody - All Music</title>
     <style>
+        /*
+        ============================================
+        CONFIGURACIÓN DE FONDO DE PÁGINA
+        ============================================
+        
+        Para cambiar el fondo de la página:
+        
+        1. IMAGEN DE FONDO (Recomendado):
+           - Descomenta la línea "background-image:" en el CSS del body
+           - Reemplaza la URL con la ruta a tu imagen
+           - Ejemplo local: url('/static/images/background.jpg')
+           - Ejemplo online: url('https://ejemplo.com/imagen.jpg')
+        
+        2. AJUSTAR EFECTO DE SILUETAS:
+           - Edita la propiedad "opacity" en body::before y body::after
+           - Valores: 0.0 (invisible) a 1.0 (muy visible)
+           - Descomenta la línea de opacity y ajusta el valor
+        
+        3. COLOR SÓLIDO (Alternativa):
+           - Cambia "background" a un color sólido, ej: background: #ff8c42;
+        
+        4. GRADIENTE CUSTOM:
+           - Personaliza los colores del gradiente en "background"
+           - Usa herramientas como https://cssgradient.io para crear gradientes
+        ============================================
+        */
+        
         * {
             margin: 0;
             padding: 0;
@@ -13,16 +40,68 @@
         }
 
         body {
-            background: linear-gradient(135deg, #ff8c42 0%, #ff6b35 25%, #f7931e 50%, #ffa500 75%, #ff8c42 100%);
-            background-attachment: fixed;
-            color: #fff;
-            min-height: 100vh;
-            display: flex;
-            position: relative;
-            overflow-x: hidden;
+            /* INSTRUCCIONES PARA CAMBIAR EL FONDO:
+               
+               1. USAR IMAGEN DE FONDO:
+                  Descomenta esta línea y actualiza la ruta:
+                  background-image: url('/static/images/mi-fondo.jpg');
+                  
+                  Ejemplos:
+                  - Imagen local: url('/static/images/background.jpg')
+                  - Imagen web: url('https://ejemplo.com/imagen.jpg')
+                  
+               2. CONTENIDO ACTUAL:
+                  - Primero se intenta cargar la imagen de fondo
+                  - Si no hay imagen, se usa el gradiente como respaldo
+            */
+            background-image: url('/static/bg-image/R1.jpg'); 
+            
+            
         }
-
-        /* Silhouette figures effect */
+        
+        /* Estilo para íconos de música */
+        .fa-music {
+            color: #ffffff !important;
+        }
+        
+        /* Todos los íconos en blanco */
+        i.fas,
+        i.far,
+        .sidebar i,
+        .main-content i {
+            color: #ffffff !important;
+        }
+        
+        /* Estilos para hacer el texto blanco */
+        .logo,
+        .all-music-subtitle,
+        .nav-item,
+        .playlist-item,
+        .playlist-info h4,
+        .playlist-info p,
+        .section-title,
+        .section-title i,
+        .song-info h4,
+        .song-info p,
+        .nav-title,
+        .nav-item i,
+        .user-actions i,
+        .search-bar i,
+        .search-bar input,
+        .playlist-count,
+        .now-playing-text h4,
+        .now-playing-text p,
+        .time,
+        .player-controls i,
+        .volume-controls i,
+        .search-bar input::placeholder,
+        ::placeholder {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+        
+        /* Efectos de siluetas borrosas en los lados */
+        /* Para ajustar la visibilidad del efecto de siluetas, descomenta y cambia el valor de opacity */
+        /* Valores recomendados: 0.0 (sin efecto) a 0.5 (efecto muy visible) */
         body::before {
             content: '';
             position: fixed;
@@ -30,11 +109,13 @@
             top: 0;
             width: 150px;
             height: 100%;
-            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.15) 0%, transparent 70%);
-            filter: blur(40px);
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.25) 0%, transparent 70%);
+            filter: blur(60px);
             z-index: 0;
+            /* Descomenta la línea siguiente y ajusta el valor (0.0 a 1.0) para controlar la intensidad */
+            opacity: 0.0; 
         }
-
+        
         body::after {
             content: '';
             position: fixed;
@@ -42,9 +123,11 @@
             top: 0;
             width: 150px;
             height: 100%;
-            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.15) 0%, transparent 70%);
-            filter: blur(40px);
+            background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.25) 0%, transparent 70%);
+            filter: blur(60px);
             z-index: 0;
+            /* Descomenta la línea siguiente y ajusta el valor (0.0 a 1.0) para controlar la intensidad */
+            /* opacity: 0.3; */
         }
 
         .sidebar {
@@ -144,7 +227,7 @@
             width: 40px;
             height: 40px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            background: rgba(0,0,0);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -186,10 +269,11 @@
         .search-bar {
             display: flex;
             align-items: center;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(0, 0, 0, 0.4);
             border-radius: 25px;
             padding: 10px 20px;
             width: 300px;
+            backdrop-filter: blur(10px);
         }
 
         .search-bar i {
@@ -274,7 +358,7 @@
             width: 100%;
             aspect-ratio: 1;
             border-radius: 12px;
-            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            background: rgba(0,0,0);
             margin-bottom: 12px;
             display: flex;
             align-items: center;
@@ -326,7 +410,7 @@
             width: 50px;
             height: 50px;
             border-radius: 8px;
-            background: linear-gradient(135deg, #f72585, #7209b7);
+            background: rgba(0,0,0);
             margin-right: 15px;
         }
 
@@ -483,7 +567,7 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="logo">
-            <i class="fas fa-music"></i>
+            
             MusicaPalBody
         </div>
         <div class="all-music-subtitle">All Music</div>
