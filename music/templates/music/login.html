@@ -10,12 +10,12 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px 0; /* algo de espacio en móviles */
             background-color: #000; /* Fondo negro */
             color: #fff;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alineación arriba para permitir el desplazamiento */
+            align-items: center; /* Centrar verticalmente todo el contenido */
             min-height: 100vh;
         }
 
@@ -66,26 +66,68 @@
             box-sizing: border-box;
         }
 
-        /* Controles (Botones) */
+        /* Controles (Formulario de login) */
         .controls {
             width: 90%;
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Espacio entre los botones */
+            gap: 15px; /* Espacio entre los elementos */
             padding-top: 10px;
         }
 
-        .button {
+        .login-form {
+            width: 100%;
             display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .login-form label {
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            color: #ddd;
+        }
+
+        .login-form input[type="text"],
+        .login-form input[type="password"],
+        .login-form input[type="tel"] {
+            padding: 14px 18px;
+            border-radius: 28px; /* estilo redondeado similar a los botones del inicio */
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.03);
+            color: #fff;
+            outline: none;
+            font-size: 1.05rem;
+        }
+
+        .login-form input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
+        /* Hacer que los inputs se vean más como los botones grandes del diseño inicial */
+        .login-form .field-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .button {
+            display: inline-flex;
             justify-content: center;
             align-items: center;
-            padding: 15px;
-            border-radius: 50px; /* Bordes redondeados de los botones */
+            padding: 12px 18px;
+            border-radius: 50px; /* Bordes redondeados del botón */
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s;
+            transition: background-color 0.2s;
             cursor: pointer;
-            border: 2px solid transparent; /* Para el contorno de los botones secundarios */
+            border: none;
+            background-color: #9f2420;
+            color: #fff;
+        }
+
+        .button:hover {
+            background-color: #b92a25;
         }
 
         /* Estilos específicos de los botones */
@@ -153,22 +195,27 @@
         <h1 class="title">MusicaPalBody</h1>
 
         <div class="controls">
-            <a href="#" class="button primary">Sign up free</a>
+            <form method="post" action="" class="login-form">
+                {% csrf_token %}
+                <div>
+                    <label for="username">Usuario</label>
+                    <input id="username" name="username" type="text" placeholder="Tu usuario" required />
+                </div>
 
-            <a href="#" class="button secondary">
-                <span class="icon phone" role="img" aria-label="Teléfono">📱</span>
-                Continue with phone number
-            </a>
+                <div>
+                    <label for="password">Contraseña</label>
+                    <input id="password" name="password" type="password" placeholder="Tu contraseña" required />
+                </div>
 
-            <a href="#" class="button secondary">
-                <span class="icon google" role="img" aria-label="Google">G</span>
-                Continue with Google
-            </a>
+                <div class="field-wrap">
+                    <label for="phone">Número de teléfono</label>
+                    <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="+34 612 345 678" pattern="[0-9+ \-()]{7,}" />
+                </div>
 
-            <a href="#" class="button secondary">
-                <span class="icon facebook" role="img" aria-label="Facebook">f</span>
-                Continue with Facebook
-            </a>
+                <div>
+                    <button type="submit" class="button primary">Iniciar sesión</button>
+                </div>
+            </form>
         </div>
 
         <div class="login-link">
