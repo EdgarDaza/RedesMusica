@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MusicaPalBody - Login/Signup</title>
+    <style>
+        /* Estilos Generales */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #000; /* Fondo negro */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alineación arriba para permitir el desplazamiento */
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px; /* Ancho máximo para simular la vista móvil */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Sección de la imagen (Silueta) */
+        .image-section {
+            width: 100%;
+            height: 350px; /* Altura aproximada de la imagen en la parte superior */
+            background: linear-gradient(to top, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 50%), 
+                        #5d0c0c; /* Color de fondo base y gradiente oscuro en la parte inferior */
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .silhouette {
+            width: 50%;
+            height: 80%;
+            background-color: rgba(255, 255, 255, 0.05); /* Simulación de la silueta oscura */
+            margin-top: 15px;
+            /* Estilo para darle una forma muy simple de silueta (opcional) */
+            border-radius: 50% 50% 0 0 / 70% 70% 0 0; 
+            box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Título */
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px 0;
+            margin: 0;
+            width: 90%;
+            box-sizing: border-box;
+        }
+
+        /* Controles (Botones) */
+        .controls {
+            width: 90%;
+            display: flex;
+            flex-direction: column;
+            gap: 15px; /* Espacio entre los botones */
+            padding-top: 10px;
+        }
+
+        .button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            border-radius: 50px; /* Bordes redondeados de los botones */
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent; /* Para el contorno de los botones secundarios */
+        }
+
+        /* Estilos específicos de los botones */
+
+        /* Botón principal: Sign up free (Rojo oscuro) */
+        .button.primary {
+            background-color: #9f2420; /* Rojo oscuro similar al de la imagen */
+            color: #fff;
+            border: none;
+        }
+
+        .button.primary:hover {
+            background-color: #b92a25;
+        }
+
+        /* Botones secundarios (Con iconos) */
+        .button.secondary {
+            background-color: transparent;
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.3); /* Contorno blanco semitransparente */
+            padding: 15px 20px;
+            box-sizing: border-box;
+        }
+
+        .button.secondary:hover {
+            border-color: rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Iconos (Simulados con texto o emojis, ya que no se usan imágenes) */
+        .icon {
+            margin-right: 10px;
+            font-size: 1.2em; /* Tamaño del icono */
+        }
+
+        .icon.phone { content: '\1F4F1'; } /* Emoji de teléfono */
+        .icon.google { color: #4285F4; } /* Color de Google */
+        .icon.facebook { color: #1877F2; } /* Color de Facebook */
+
+        /* Log in link */
+        .login-link {
+            text-align: center;
+            padding: 30px 0;
+        }
+
+        .login-link a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .login-link a:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-section">
+            <div class="silhouette"></div>
+        </div>
+
+        <h1 class="title">MusicaPalBody</h1>
+
+        <div class="controls">
+            <a href="#" class="button primary">Sign up free</a>
+
+            <a href="#" class="button secondary">
+                <span class="icon phone" role="img" aria-label="Teléfono">📱</span>
+                Continue with phone number
+            </a>
+
+            <a href="#" class="button secondary">
+                <span class="icon google" role="img" aria-label="Google">G</span>
+                Continue with Google
+            </a>
+
+            <a href="#" class="button secondary">
+                <span class="icon facebook" role="img" aria-label="Facebook">f</span>
+                Continue with Facebook
+            </a>
+        </div>
+
+        <div class="login-link">
+            <a href="#">Log in</a>
+        </div>
+    </div>
+</body>
+</html>
