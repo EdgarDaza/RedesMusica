@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -54,7 +55,7 @@
                   - Primero se intenta cargar la imagen de fondo
                   - Si no hay imagen, se usa el gradiente como respaldo
             */
-            background-image: url('/static/bg-image/R1.jpg'); 
+                background-image: url("{% static 'bg-image/R1.jpg' %}");
             
             
         }
