@@ -3,6 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Song
+from django.views.decorators.http import require_http_methods
+
+
 
 
 def login_view(request):
@@ -20,8 +24,30 @@ def login_view(request):
 
 def artist_view(request):
     return render(request, 'music/artist.html')@login_required(login_url='login')
+
+@login_required(login_url='login')
 def home(request):
-    return render(request, 'music/home.html', {'user': request.user})
+    section = request.GET.get('section', 'recent')  # valor por defecto
+    songs = Song.objects.all().order_by('-id')
+
+    # Ejemplo básico de filtrado o título
+    if section == 'artist':
+        title = "Artists"
+    elif section == 'albums':
+        title = "Albums"
+    elif section == 'songs':
+        title = "Songs"
+    elif section == 'made':
+        title = "Made for You"
+    else:
+        title = "Recently Added"
+
+    return render(request, 'music/home.html', {
+        'user': request.user,
+        'songs': songs,
+        'section': section,
+        'title': title,
+    })
 
 
 def logout_view(request):
@@ -50,3 +76,25 @@ def register_view(request):
         return redirect('login')
 
     return render(request, 'music/register.html')
+
+@login_required(login_url='login')
+@require_http_methods(["GET", "POST"])
+def upload_song(request):
+    if request.method == "POST":
+        title = request.POST.get("title") or ""
+        artist = request.POST.get("artist") or "Desconocido"
+        file = request.FILES.get("file")
+        cover = request.FILES.get("cover")
+
+        if not file:
+            from django.contrib import messages
+            messages.error(request, "Debes seleccionar un archivo de audio.")
+            return redirect('upload_song')
+
+        song = Song(title=title or file.name.rsplit('.', 1)[0], artist=artist, file=file)
+        if cover:
+            song.cover = cover
+        song.save()
+        return redirect('home')
+
+    return render(request, 'music/upload.html')

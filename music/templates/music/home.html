@@ -566,282 +566,399 @@
 </head>
 <body>
     <!-- Sidebar -->
-     
     <div class="sidebar">
-        <div class="logo">
-            
-            MusicaPalBody
-        </div>
-        <div class="all-music-subtitle">All Music</div>
-        
-        <div class="nav-section">
-            <div class="nav-item active">
-                <i class="fas fa-clock"></i>
-                Recently Added
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-microphone"></i>
-                Artist
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-compact-disc"></i>
-                Albums
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-music"></i>
-                Songs
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-user"></i>
-                Made for You
-            </div>
-            <div class="nav-item">
-                <i class="fas fa-list"></i>
-                Playlist
-                <i class="fas fa-chevron-down" style="margin-left: auto; font-size: 12px;"></i>
-            </div>
-        </div>
-        
-        <div class="nav-section">
-            <div class="nav-title">Playlist</div>
-            <div class="playlist-item active">
-                <div class="playlist-icon">
-                    <i class="fas fa-list"></i>
-                </div>
-                <div class="playlist-info">
-                    <h4>All Playlists</h4>
-                    <p>304 Playlist</p>
-                </div>
-            </div>
-            <div class="playlist-item">
-                <div class="playlist-icon">
-                    <i class="fas fa-headphones"></i>
-                </div>
-                <div class="playlist-info">
-                    <h4>Good Vibes Only</h4>
-                    <p>120 songs</p>
-                </div>
-            </div>
-            <div class="playlist-item">
-                <div class="playlist-icon">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="playlist-info">
-                    <h4>Indie Anthems</h4>
-                    <p>85 songs</p>
-                </div>
-            </div>
-            <div class="playlist-item">
-                <div class="playlist-icon">
-                    <i class="fas fa-plus"></i>
-                </div>
-                <div class="playlist-info">
-                    <h4>Add Playlist</h4>
-                    <p>Create new</p>
-                </div>
-            </div>
-        </div>
-        
-        <div style="padding-top: 20px; text-align: center;">
-            <i class="fas fa-search" style="font-size: 18px; color: #000;"></i>
+    <div class="logo">
+        MusicaPalBody
+    </div>
+    <div class="all-music-subtitle">All Music</div>
+
+    <div class="nav-section">
+
+        <a href="?section=recent" class="nav-item {% if section == 'recent' %}active{% endif %}">
+        <i class="fas fa-clock"></i>
+        <span>Recently Added</span>
+        </a>
+
+        <a href="?section=artist" class="nav-item {% if section == 'artist' %}active{% endif %}">
+        <i class="fas fa-microphone"></i>
+        <span>Artist</span>
+        </a>
+
+        <a href="?section=albums" class="nav-item {% if section == 'albums' %}active{% endif %}">
+        <i class="fas fa-compact-disc"></i>
+        <span>Albums</span>
+        </a>
+
+        <a href="?section=songs" class="nav-item {% if section == 'songs' %}active{% endif %}">
+        <i class="fas fa-music"></i>
+        <span>Songs</span>
+        </a>
+
+        <a href="?section=made" class="nav-item {% if section == 'made' %}active{% endif %}">
+        <i class="fas fa-user"></i>
+        <span>Made for You</span>
+        </a>
+
+        <div class="nav-item playlist-toggle" id="toggle-playlists">
+        <i class="fas fa-list"></i>
+        <span>Playlist</span>
+        <i class="fas fa-chevron-down" id="playlist-toggle-icon" style="margin-left:auto;font-size:12px;"></i>
         </div>
     </div>
-    
+
+    <!-- Playlist section -->
+    <div class="nav-section" id="playlist-section">
+        <div class="nav-title">PLAYLIST</div>
+
+        <div class="playlist-item active">
+        <div class="playlist-icon">
+            <i class="fas fa-list"></i>
+        </div>
+        <div class="playlist-info">
+            <h4>All Playlists</h4>
+            <p>304 Playlist</p>
+        </div>
+        </div>
+
+        <div class="playlist-item">
+        <div class="playlist-icon">
+            <i class="fas fa-headphones"></i>
+        </div>
+        <div class="playlist-info">
+            <h4>Good Vibes Only</h4>
+            <p>120 songs</p>
+        </div>
+        </div>
+
+        <div class="playlist-item">
+        <div class="playlist-icon">
+            <i class="fas fa-music"></i>
+        </div>
+        <div class="playlist-info">
+            <h4>Indie Anthems</h4>
+            <p>85 songs</p>
+        </div>
+        </div>
+
+        <div class="playlist-item">
+        <div class="playlist-icon">
+            <i class="fas fa-plus"></i>
+        </div>
+        <div class="playlist-info">
+            <h4>Add Playlist</h4>
+            <p>Create new</p>
+        </div>
+        </div>
+    </div>
+
+    <div style="padding-top:20px;text-align:center;">
+        <i class="fas fa-search" style="font-size:18px;color:#000;"></i>
+    </div>
+    </div>
+
     <!-- Main Content -->
     <main class="main-content" role="main">
         <div class="header">
             <div></div>
             <div class="user-actions">
-                <i class="fas fa-bars" style="font-size: 20px;"></i>
+                    <i class="fas fa-bars" style="font-size: 20px;"></i>
             </div>
         </div>
         
+        <div style="margin: 10px 0 20px;">
+            <a href="{% url 'upload_song' %}" style="color:#fff;text-decoration:underline;">+ Subir canción</a>
+        </div>
+
+
         <div class="section-title">
-            Playlist
-            <span class="playlist-count">304 Playlist</span>
+                Playlist
+                <span class="playlist-count">304 Playlist</span>
         </div>
-        
+            
         <div class="search-bar" style="margin-bottom: 30px;">
-            <i class="fas fa-search"></i>
-            <input type="text" placeholder="Search in Albums">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search in Albums">
         </div>
-        
+            
         <div class="song-list">
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
+            {% if songs %}
+                {% for song in songs %}
+                <div class="song-card" 
+                    data-title="{{ song.title }}"
+                    data-artist="{{ song.artist }}"
+                    data-file="{{ song.file.url }}"
+                    {% if song.cover %}
+                    data-cover="{{ song.cover.url }}"
+                    {% else %}
+                    data-cover="{% static 'bg-image/R1.jpg' %}"
+                    {% endif %}>
+                    
+                    <div class="song-cover">
+                        {% if song.cover %}
+                            <img src="{{ song.cover.url }}" alt="cover" />
+                        {% else %}
+                            <i class="fas fa-music"></i>
+                        {% endif %}
+                    </div>
+                    <div class="song-info">
+                        <h4>{{ song.title }}</h4>
+                        <p>{{ song.artist }}</p>
+                    </div>
                 </div>
-                <div class="song-info">
-                    <h4>Narcisista</h4>
-                    <p>The Warning</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>Colgando En Tus Manos</h4>
-                    <p>Carlos Baute, Marta Sánchez</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>Sympathy For The Devil</h4>
-                    <p>The Rolling Stones</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>La Vida Es Un Carnaval</h4>
-                    <p>Celia Cruz</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>Redlight</h4>
-                    <p>Swedish House Mafia & Sting</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>Stateside With Zara Larsson</h4>
-                    <p>PinkPantheress</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>Jupiter</h4>
-                    <p>The Marias</p>
-                </div>
-            </div>
-            
-            <div class="song-card">
-                <div class="song-cover">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="song-info">
-                    <h4>From The Inside</h4>
-                    <p>Linkin Park</p>
-                </div>
-            </div>
+                {% endfor %}
+            {% else %}
+                <p style="color:#fff;">No hay canciones todavía. Ve a 
+                <a href="{% url 'upload_song' %}" style="color:#fff;text-decoration:underline;">Subir canción</a>.</p>
+            {% endif %}
         </div>
+
     </main>
     
-    <!-- Now Playing Bar -->
+    <!-- Reproductor inferior -->
     <div class="now-playing">
         <div class="now-playing-info">
-            <div class="now-playing-cover"></div>
+            <img id="player-cover" class="now-playing-cover" src="{% static 'bg-image/R1.jpg' %}" alt="cover">
             <div class="now-playing-text">
-                <h4>Vuelves</h4>
-                <p>Juanes</p>
+                <h4 id="player-title">Selecciona una canción</h4>
+                <p id="player-artist"></p>
             </div>
         </div>
-        
+
         <div class="player-controls">
-            <i class="fas fa-random" aria-hidden="true"></i>
-            <i class="fas fa-step-backward" aria-hidden="true"></i>
-            <i class="fas fa-play-circle play-pause" role="button" aria-pressed="false" aria-label="Play" tabindex="0"></i>
-            <i class="fas fa-step-forward" aria-hidden="true"></i>
-            <i class="fas fa-redo" aria-hidden="true"></i>
+            <i class="fas fa-random" id="shuffle-btn" title="Modo aleatorio"></i>
+            <i class="fas fa-step-backward" id="prev-btn"></i>
+            <i class="fas fa-play-circle play-pause" id="play-btn"></i>
+            <i class="fas fa-step-forward" id="next-btn"></i>
+            <i class="fas fa-redo" id="repeat-btn" title="Sin repetición"></i>
         </div>
-        
+
         <div class="progress-controls">
-            <span class="time">1:42</span>
-            <div class="progress-bar">
-                <div class="progress"></div>
+            <span id="current-time" class="time">0:00</span>
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress" id="progress"></div>
             </div>
-            <span class="time">4:00</span>
+            <span id="duration" class="time">0:00</span>
         </div>
-        
+
         <div class="volume-controls">
-            <i class="fas fa-volume-up"></i>
-            <div class="volume-bar">
-                <div class="volume-level"></div>
-            </div>
-            <i class="fas fa-expand-arrows-alt" style="margin-left: 10px; cursor: pointer;"></i>
+            <i class="fas fa-volume-up" id="volume-icon" style="cursor:pointer;"></i>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.8" style="width:100px;">
         </div>
+
+        <audio id="audio-player"></audio>
     </div>
 
+
     <script>
-        // Make scripts run after DOM is ready and add accessibility improvements
-        document.addEventListener('DOMContentLoaded', function () {
-            // Toggle play/pause button (with ARIA and keyboard support)
-            const playPauseBtn = document.querySelector('.play-pause');
-            if (playPauseBtn) {
-                const togglePlay = function () {
-                    if (playPauseBtn.classList.contains('fa-play-circle')) {
-                        playPauseBtn.classList.remove('fa-play-circle');
-                        playPauseBtn.classList.add('fa-pause-circle');
-                        playPauseBtn.setAttribute('aria-pressed', 'true');
-                        playPauseBtn.setAttribute('aria-label', 'Pause');
-                    } else {
-                        playPauseBtn.classList.remove('fa-pause-circle');
-                        playPauseBtn.classList.add('fa-play-circle');
-                        playPauseBtn.setAttribute('aria-pressed', 'false');
-                        playPauseBtn.setAttribute('aria-label', 'Play');
-                    }
-                };
+    document.addEventListener('DOMContentLoaded', () => {
+        const player = document.getElementById('audio-player');
+        const playBtn = document.getElementById('play-btn');
+        const progressBar = document.getElementById('progress-bar');
+        const progress = document.getElementById('progress');
+        const currentTimeEl = document.getElementById('current-time');
+        const durationEl = document.getElementById('duration');
+        const volumeSlider = document.getElementById('volume-slider');
+        const volumeIcon = document.getElementById('volume-icon');
+        const coverImg = document.getElementById('player-cover');
+        const titleEl = document.getElementById('player-title');
+        const artistEl = document.getElementById('player-artist');
+        const shuffleBtn = document.getElementById('shuffle-btn');
+        const repeatBtn = document.getElementById('repeat-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const cards = document.querySelectorAll('.song-card');
 
-                playPauseBtn.addEventListener('click', togglePlay);
-                // Keyboard support (Space and Enter)
-                playPauseBtn.addEventListener('keydown', function (e) {
-                    if (e.key === ' ' || e.key === 'Enter') {
-                        e.preventDefault();
-                        togglePlay();
-                    }
-                });
-            }
+        let currentSongIndex = -1;
+        let songList = Array.from(cards);
+        let isShuffle = false;
+        let repeatMode = 0; // 0 = sin repetir, 1 = repetir 1 vez, 2 = repetir lista
+        let lastVolume = 0.8;
+        let previousIndex = -1;
 
-            // Add active state to playlist items (if any)
-            const playlistItems = document.querySelectorAll('.playlist-item');
-            if (playlistItems && playlistItems.length) {
-                playlistItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        playlistItems.forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-                    });
-                });
-            }
-
-            // Add active state to nav items (if any)
-            const navItems = document.querySelectorAll('.nav-item');
-            if (navItems && navItems.length) {
-                navItems.forEach(item => {
-                    item.addEventListener('click', function() {
-                        navItems.forEach(i => i.classList.remove('active'));
-                        this.classList.add('active');
-                    });
-                });
-            }
-
-            // Set decorative icons to aria-hidden unless they are interactive or explicitly labeled
-            document.querySelectorAll('i:not([role="button"]):not([aria-label])').forEach(function(el) {
-                el.setAttribute('aria-hidden', 'true');
+        // 🎵 Clic en una canción
+        cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                currentSongIndex = index;
+                loadAndPlay(card);
             });
         });
+
+        function loadAndPlay(card) {
+            const file = card.dataset.file;
+            const title = card.dataset.title;
+            const artist = card.dataset.artist;
+            const cover = card.dataset.cover;
+
+            player.src = file;
+            titleEl.textContent = title;
+            artistEl.textContent = artist;
+            coverImg.src = cover;
+            player.play();
+            playBtn.classList.replace('fa-play-circle', 'fa-pause-circle');
+        }
+
+        // ▶️ Pausar / Reproducir
+        playBtn.addEventListener('click', () => {
+            if (!player.src) return;
+            if (player.paused) {
+                player.play();
+                playBtn.classList.replace('fa-play-circle', 'fa-pause-circle');
+            } else {
+                player.pause();
+                playBtn.classList.replace('fa-pause-circle', 'fa-play-circle');
+            }
+        });
+
+        // ⏱️ Barra de progreso
+        player.addEventListener('timeupdate', () => {
+            if (player.duration) {
+                const percent = (player.currentTime / player.duration) * 100;
+                progress.style.width = percent + '%';
+                currentTimeEl.textContent = formatTime(player.currentTime);
+                durationEl.textContent = formatTime(player.duration);
+            }
+        });
+
+        progressBar.addEventListener('click', e => {
+            // Evitar saltos si no hay una canción cargada
+            if (!player.src) return;
+
+            // Si el archivo aún no cargó la metadata (duración), espera al evento
+            if (isNaN(player.duration) || player.duration === 0) {
+                player.addEventListener('loadedmetadata', function seekOnReady() {
+                    const rect = progressBar.getBoundingClientRect();
+                    const offsetX = e.clientX - rect.left;
+                    const newTime = (offsetX / rect.width) * player.duration;
+                    player.currentTime = newTime;
+                    player.removeEventListener('loadedmetadata', seekOnReady);
+                });
+            } else {
+                // Si la metadata ya está disponible, busca inmediatamente
+                const rect = progressBar.getBoundingClientRect();
+                const offsetX = e.clientX - rect.left;
+                const newTime = (offsetX / rect.width) * player.duration;
+                player.currentTime = newTime;
+            }
+        });
+
+
+        // 🔊 Volumen
+        volumeSlider.addEventListener('input', () => {
+            player.volume = volumeSlider.value;
+            updateVolumeIcon();
+        });
+
+        volumeIcon.addEventListener('click', () => {
+            if (player.volume > 0) {
+                lastVolume = player.volume;
+                player.volume = 0;
+                volumeSlider.value = 0;
+            } else {
+                player.volume = lastVolume || 0.8;
+                volumeSlider.value = player.volume;
+            }
+            updateVolumeIcon();
+        });
+
+        function updateVolumeIcon() {
+            if (player.volume === 0) {
+                volumeIcon.classList.replace('fa-volume-up', 'fa-volume-mute');
+            } else {
+                volumeIcon.classList.replace('fa-volume-mute', 'fa-volume-up');
+            }
+        }
+
+        // 🔀 Aleatorio
+        shuffleBtn.addEventListener('click', () => {
+            isShuffle = !isShuffle;
+            shuffleBtn.style.color = isShuffle ? '#ff3b3b' : '#fff';
+            shuffleBtn.title = isShuffle ? 'Modo aleatorio activado' : 'Modo aleatorio desactivado';
+        });
+
+        // 🔁 Repetición
+        repeatBtn.addEventListener('click', () => {
+            repeatMode = (repeatMode + 1) % 3;
+            switch (repeatMode) {
+                case 0:
+                    repeatBtn.style.color = '#fff';
+                    repeatBtn.title = 'Repetición desactivada';
+                    break;
+                case 1:
+                    repeatBtn.style.color = '#9f2420';
+                    repeatBtn.title = 'Repetir canción una vez';
+                    break;
+                case 2:
+                    repeatBtn.style.color = '#ff7f50';
+                    repeatBtn.title = 'Repetir lista completa';
+                    break;
+            }
+        });
+
+        // ⏭️ Siguiente
+        nextBtn.addEventListener('click', playNext);
+        prevBtn.addEventListener('click', playPrevious);
+
+        // 🔚 Al terminar canción
+        player.addEventListener('ended', () => {
+            if (repeatMode === 1) {
+                player.currentTime = 0;
+                player.play();
+            } else if (repeatMode === 2) {
+                playNext();
+            } else if (isShuffle) {
+                playRandom();
+            } else if (currentSongIndex < songList.length - 1) {
+                playNext();
+            } else {
+                playBtn.classList.replace('fa-pause-circle', 'fa-play-circle');
+            }
+        });
+
+        // Función para siguiente canción
+        function playNext() {
+            if (songList.length === 0) return;
+
+            if (isShuffle) {
+                playRandom();
+                return;
+            }
+
+            currentSongIndex = (currentSongIndex + 1) % songList.length;
+            loadAndPlay(songList[currentSongIndex]);
+        }
+
+        // Aleatorio real (sin repetir la misma)
+        function playRandom() {
+            if (songList.length <= 1) return;
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * songList.length);
+            } while (randomIndex === currentSongIndex);
+            currentSongIndex = randomIndex;
+            loadAndPlay(songList[currentSongIndex]);
+        }
+
+        // Anterior
+        function playPrevious() {
+            if (songList.length === 0) return;
+            if (isShuffle) {
+                playRandom();
+                return;
+            }
+            currentSongIndex = (currentSongIndex - 1 + songList.length) % songList.length;
+            loadAndPlay(songList[currentSongIndex]);
+        }
+
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${minutes}:${secs.toString().padStart(2, '0')}`;
+        }
+    });
     </script>
+
+
+
 </body>
 </html>
 </html>
