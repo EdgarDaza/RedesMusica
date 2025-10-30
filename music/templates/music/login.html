@@ -195,7 +195,8 @@
         <h1 class="title">MusicaPalBody</h1>
 
         <div class="controls">
-            <form method="post" action="" class="login-form">
+            <form method="post" action="{% url 'login' %}" class="login-form">
+
                 {% csrf_token %}
                 <div>
                     <label for="username">Usuario</label>
@@ -219,7 +220,7 @@
         </div>
 
         <div class="login-link">
-            <a href="#">Log in</a>
+            ¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate</a>
         </div>
     </div>
 </body>
