@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkin Park - Página de Artista (Réplica)</title>
+    <style>
+        /* Variables y Reset Básico */
+        :root {
+            --color-fondo: #121212;
+            --color-secundario: #181818;
+            --color-terciario: #282828;
+            --color-texto-claro: #ffffff;
+            --color-texto-gris: #b3b3b3;
+            --color-resaltado: #1db954; /* Un color verde típico de plataformas de música */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif; /* Usamos una fuente genérica similar */
+        }
+
+        body {
+            background-color: var(--color-fondo);
+            color: var(--color-texto-claro);
+        }
+
+        /* --- Estilos del Contenedor Principal y Header --- */
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            background-color: var(--color-secundario);
+        }
+
+        .search-bar {
+            flex-grow: 1;
+            max-width: 400px;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: none;
+            border-radius: 500px;
+            background-color: var(--color-terciario);
+            color: var(--color-texto-claro);
+            font-size: 16px;
+        }
+
+        .search-bar::before {
+            content: '🔍';
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-texto-gris);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-menu .user-btn {
+            background-color: #000000;
+            color: var(--color-texto-claro);
+            padding: 8px 15px;
+            border-radius: 500px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        /* --- Estilos del Banner del Artista --- */
+        .artist-banner {
+            position: relative;
+            padding: 30px;
+            background: linear-gradient(to top, var(--color-fondo) 0%, rgba(139, 0, 0, 0.5) 100%); /* Simulación del degradado rojizo oscuro */
+            display: flex;
+            align-items: flex-end;
+            min-height: 350px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .artist-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('imagen.jpg'); /* Se usa la imagen original para el fondo */
+            background-size: cover;
+            background-position: center;
+            opacity: 0.3; /* Oscurecer la imagen de fondo */
+            z-index: -1;
+        }
+
+        .artist-info {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            z-index: 2;
+        }
+
+        .artist-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--color-texto-claro);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 2px solid var(--color-texto-claro);
+        }
+
+        .artist-logo img {
+            max-width: 70%;
+            height: auto;
+        }
+
+        .artist-details h3 {
+            font-size: 14px;
+            color: var(--color-texto-claro);
+            font-weight: 400;
+            margin-bottom: 5px;
+        }
+
+        .verified {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: #3d91f4; /* Simulación del color azul de verificación */
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .artist-name {
+            font-size: 80px;
+            font-weight: 900;
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .monthly-listeners {
+            font-size: 18px;
+            color: var(--color-texto-claro);
+            font-weight: 500;
+        }
+
+        /* --- Contenido Principal (Botones y Listas) --- */
+        .main-content {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .play-button {
+            width: 50px;
+            height: 50px;
+            background-color: var(--color-resaltado);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 30px;
+            color: #000000;
+        }
+
+        .follow-button {
+            background-color: transparent;
+            color: var(--color-texto-gris);
+            border: 1px solid var(--color-texto-gris);
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        /* --- Lista de Canciones Populares --- */
+        .popular-tracks h2, .popular-releases h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .track-list {
+            list-style: none;
+        }
+
+        .track-item {
+            display: grid;
+            grid-template-columns: 20px 40px 1fr 100px 50px;
+            align-items: center;
+            padding: 10px 0;
+            gap: 15px;
+            color: var(--color-texto-gris);
+            border-radius: 5px;
+        }
+
+        .track-item:hover {
+            background-color: var(--color-terciario);
+        }
+
+        .track-item .number {
+            text-align: right;
+            font-size: 16px;
+        }
+
+        .track-item img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+
+        .track-item .details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: var(--color-texto-claro);
+        }
+
+        .track-item .details .title {
+            font-size: 16px;
+            font-weight: 400;
+        }
+
+        .track-item .plays {
+            text-align: right;
+        }
+
+        .track-item .duration {
+            text-align: right;
+        }
+
+        .see-more {
+            display: block;
+            margin-top: 15px;
+            color: var(--color-texto-gris);
+            font-size: 14px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* --- Canciones Gustadas y Releases --- */
+        .liked-songs-card {
+            background-color: var(--color-secundario);
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .liked-songs-card .cover {
+            width: 60px;
+            height: 60px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23FFFFFF"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.11C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>');
+            background-color: #5038A0; /* Color morado/azul oscuro para la portada */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 50%;
+            border-radius: 5px;
+        }
+
+        .liked-songs-card .info h3 {
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+
+        .liked-songs-card .info p {
+            font-size: 14px;
+            color: var(--color-texto-gris);
+        }
+
+        .popular-releases .releases-grid {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .release-item {
+            width: 150px;
+            background-color: var(--color-secundario);
+            padding: 15px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .release-item:hover {
+             background-color: var(--color-terciario);
+        }
+
+        .release-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .release-item .title {
+            font-weight: bold;
+            font-size: 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-top">
+            <div class="search-bar">
+                <input type="text" placeholder="🔍 Artistas, canciones, o podcasts">
+            </div>
+            <div class="user-menu">
+                <a href="#" class="user-btn">User ▼</a>
+            </div>
+        </div>
+
+        <div class="artist-banner">
+            <div class="artist-info">
+                <div class="artist-logo">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23121212'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm0-4h-2V6h2v8z'/></svg>" alt="Linkin Park Logo">
+                </div>
+                <div class="artist-details">
+                    <p class="verified">
+                        <span style="font-size: 16px;">✅</span> Verified Artist
+                    </p>
+                    <h1 class="artist-name">Linkin Park</h1>
+                    <p class="monthly-listeners">53, 091, 814 monthly listeners</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="left-section">
+                <div class="actions">
+                    <div class="play-button">▶</div>
+                    <button class="follow-button">Follow</button>
+                </div>
+
+                <div class="popular-tracks">
+                    <h2>Popular</h2>
+                    <ul class="track-list">
+                        <li class="track-item">
+                            <span class="number">1</span>
+                            <img src="https://i.scdn.co/image/ab67616d00001e028b375b4f2c062c3e167e4368" alt="In the End Cover">
+                            <div class="details">
+                                <span class="title">In the end</span>
+                            </div>
+                            <span class="plays">2.846.318.362</span>
+                            <span class="duration">03:36</span>
+                        </li>
+                        <li class="track-item">
+                            <span class="number">2</span>
+                            <img src="https://i.scdn.co/image/ab67616d00001e02ef6701f2249d8636b80e8071" alt="Numb Cover">
+                            <div class="details">
+                                <span class="title">Numb</span>
+                            </div>
+                            <span class="plays">2.474.179.359</span>
+                            <span class="duration">03:07</span>
+                        </li>
+                         <li class="track-item">
+                            <span class="number">3</span>
+                            <img src="https://i.scdn.co/image/ab67616d00001e028014e365005b4105b5f25712" alt="Somewhere I Belong Cover">
+                            <div class="details">
+                                <span class="title">Somewhere I Belong</span>
+                            </div>
+                            <span class="plays">848.075.093</span>
+                            <span class="duration">03:33</span>
+                        </li>
+                        <li class="track-item">
+                            <span class="number">4</span>
+                            <img src="https://i.scdn.co/image/ab67616d00001e028681e80939c36287c140411d" alt="What I've Done Cover">
+                            <div class="details">
+                                <span class="title">What I've Done</span>
+                            </div>
+                            <span class="plays">1.229.909.208</span>
+                            <span class="duration">03:25</span>
+                        </li>
+                        <li class="track-item">
+                            <span class="number">5</span>
+                            <img src="https://i.scdn.co/image/ab67616d00001e02026117498c8c6264d852233f" alt="The Emptiness Machine Cover">
+                            <div class="details">
+                                <span class="title">The Emptiness Machine</span>
+                            </div>
+                            <span class="plays">698.225.919</span>
+                            <span class="duration">03:10</span>
+                        </li>
+                    </ul>
+                    <a href="#" class="see-more">SEE MORE</a>
+                </div>
+
+                <div class="popular-releases">
+                    <h2>Popular releases</h2>
+                    <div class="releases-grid">
+                        <div class="release-item">
+                            <img src="https://i.scdn.co/image/ab67616d0000b273d42b91024227f297de181313" alt="Release 1">
+                            <p class="title">One More Light</p>
+                        </div>
+                        <div class="release-item">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2732943e86c1285493b2a26c483" alt="Release 2">
+                            <p class="title">Meteora</p>
+                        </div>
+                        <div class="release-item">
+                            <img src="https://i.scdn.co/image/ab67616d0000b2738b375b4f2c062c3e167e4368" alt="Release 3">
+                            <p class="title">Hybrid Theory</p>
+                        </div>
+                        <div class="release-item">
+                            <img src="https://i.scdn.co/image/ab67616d0000b27394d1372b0c4103130d7cc5c6" alt="Release 4">
+                            <p class="title">Minutes to Midnight</p>
+                        </div>
+                        <div class="release-item">
+                            <img src="https://i.scdn.co/image/ab67616d0000b273c5970c4c47f7149a46a6f642" alt="Release 5">
+                            <p class="title">A Thousand Suns</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="right-section">
+                <div class="liked-songs-card">
+                    <div class="cover">
+                        </div>
+                    <div class="info">
+                        <h3>Liked Songs</h3>
+                        <p>You've liked 4 songs</p>
+                        <p>By Ronald</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+

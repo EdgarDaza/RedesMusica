@@ -6,3 +6,5 @@ def home(request):
 def login_view(request):
     return render(request, 'music/login.html')
 
+def artist_view(request):
+    return render(request, 'music/artist.html')
