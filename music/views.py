@@ -5,6 +5,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Song
 from django.views.decorators.http import require_http_methods
+from .models import Song
+import os
+from django.http import JsonResponse
+from dotenv import load_dotenv
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
 
 
 
@@ -98,3 +104,38 @@ def upload_song(request):
         return redirect('home')
 
     return render(request, 'music/upload.html')
+
+load_dotenv()  # Carga las variables del archivo .env
+
+def spotify_search(request):
+    query = request.GET.get('q')
+    if not query:
+        return JsonResponse({'error': 'Missing search parameter ?q='}, status=400)
+
+    # Autenticación con Spotify
+    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
+        client_id=os.getenv('SPOTIFY_CLIENT_ID'),
+        client_secret=os.getenv('SPOTIFY_CLIENT_SECRET')
+    ))
+
+    results = sp.search(q=query, type='track', limit=20)
+
+    songs = []
+    for track in results['tracks']['items']:
+        # ⚠️ Filtrar solo canciones con preview disponible
+        if not track['preview_url']:
+            continue
+
+        songs.append({
+            'title': track['name'],
+            'artist': track['artists'][0]['name'],
+            'cover': track['album']['images'][0]['url'] if track['album']['images'] else '',
+            'preview_url': track['preview_url'],
+            'spotify_url': track['external_urls']['spotify'],
+        })
+
+    # Si no hay canciones válidas, informar
+    if not songs:
+        return JsonResponse({'songs': [], 'message': 'No songs with preview available'}, status=200)
+
+    return JsonResponse({'songs': songs})

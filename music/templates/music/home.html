@@ -680,36 +680,14 @@
                 <input type="text" placeholder="Search in Albums">
         </div>
             
-        <div class="song-list">
-            {% if songs %}
-                {% for song in songs %}
-                <div class="song-card" 
-                    data-title="{{ song.title }}"
-                    data-artist="{{ song.artist }}"
-                    data-file="{{ song.file.url }}"
-                    {% if song.cover %}
-                    data-cover="{{ song.cover.url }}"
-                    {% else %}
-                    data-cover="{% static 'bg-image/R1.jpg' %}"
-                    {% endif %}>
-                    
-                    <div class="song-cover">
-                        {% if song.cover %}
-                            <img src="{{ song.cover.url }}" alt="cover" />
-                        {% else %}
-                            <i class="fas fa-music"></i>
-                        {% endif %}
-                    </div>
-                    <div class="song-info">
-                        <h4>{{ song.title }}</h4>
-                        <p>{{ song.artist }}</p>
-                    </div>
-                </div>
-                {% endfor %}
-            {% else %}
-                <p style="color:#fff;">No hay canciones todavía. Ve a 
-                <a href="{% url 'upload_song' %}" style="color:#fff;text-decoration:underline;">Subir canción</a>.</p>
-            {% endif %}
+        <div class="search-header">
+            <input type="text" id="searchInput" placeholder="Buscar canción o artista...">
+            <button id="searchBtn"><i class="fas fa-search"></i> Buscar</button>
+        </div>
+
+        <div id="results" class="song-grid"></div>
+            <div id="noResults" class="no-results" style="display:none;">
+            No se encontraron canciones con preview disponible.
         </div>
 
     </main>
@@ -750,215 +728,64 @@
 
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const player = document.getElementById('audio-player');
+        const searchBtn = document.getElementById('searchBtn');
+        const searchInput = document.getElementById('searchInput');
+        const results = document.getElementById('results');
+        const noResults = document.getElementById('noResults');
+
+        // Elementos del reproductor global
+        const audioPlayer = document.getElementById('audio-player');
+        const playerTitle = document.getElementById('player-title');
+        const playerArtist = document.getElementById('player-artist');
+        const playerCover = document.getElementById('player-cover');
         const playBtn = document.getElementById('play-btn');
-        const progressBar = document.getElementById('progress-bar');
-        const progress = document.getElementById('progress');
-        const currentTimeEl = document.getElementById('current-time');
-        const durationEl = document.getElementById('duration');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeIcon = document.getElementById('volume-icon');
-        const coverImg = document.getElementById('player-cover');
-        const titleEl = document.getElementById('player-title');
-        const artistEl = document.getElementById('player-artist');
-        const shuffleBtn = document.getElementById('shuffle-btn');
-        const repeatBtn = document.getElementById('repeat-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const prevBtn = document.getElementById('prev-btn');
-        const cards = document.querySelectorAll('.song-card');
 
-        let currentSongIndex = -1;
-        let songList = Array.from(cards);
-        let isShuffle = false;
-        let repeatMode = 0; // 0 = sin repetir, 1 = repetir 1 vez, 2 = repetir lista
-        let lastVolume = 0.8;
-        let previousIndex = -1;
+        function renderSongs(songs) {
+        results.innerHTML = '';
+        if (!songs.length) {
+            noResults.style.display = 'block';
+            return;
+        }
+        noResults.style.display = 'none';
 
-        // 🎵 Clic en una canción
-        cards.forEach((card, index) => {
+        songs.forEach(song => {
+            const card = document.createElement('div');
+            card.className = 'song-card';
+            card.innerHTML = `
+            <img src="${song.cover}" alt="cover">
+            <h4>${song.title}</h4>
+            <p>${song.artist}</p>
+            `;
+
             card.addEventListener('click', () => {
-                currentSongIndex = index;
-                loadAndPlay(card);
-            });
-        });
-
-        function loadAndPlay(card) {
-            const file = card.dataset.file;
-            const title = card.dataset.title;
-            const artist = card.dataset.artist;
-            const cover = card.dataset.cover;
-
-            player.src = file;
-            titleEl.textContent = title;
-            artistEl.textContent = artist;
-            coverImg.src = cover;
-            player.play();
+            audioPlayer.src = song.preview_url;
+            playerTitle.textContent = song.title;
+            playerArtist.textContent = song.artist;
+            playerCover.src = song.cover;
+            audioPlayer.play();
             playBtn.classList.replace('fa-play-circle', 'fa-pause-circle');
+            });
+
+            results.appendChild(card);
+        });
         }
 
-        // ▶️ Pausar / Reproducir
-        playBtn.addEventListener('click', () => {
-            if (!player.src) return;
-            if (player.paused) {
-                player.play();
-                playBtn.classList.replace('fa-play-circle', 'fa-pause-circle');
-            } else {
-                player.pause();
-                playBtn.classList.replace('fa-pause-circle', 'fa-play-circle');
-            }
-        });
+        async function searchSongs() {
+        const q = searchInput.value.trim();
+        if (!q) return;
 
-        // ⏱️ Barra de progreso
-        player.addEventListener('timeupdate', () => {
-            if (player.duration) {
-                const percent = (player.currentTime / player.duration) * 100;
-                progress.style.width = percent + '%';
-                currentTimeEl.textContent = formatTime(player.currentTime);
-                durationEl.textContent = formatTime(player.duration);
-            }
-        });
+        results.innerHTML = '<p class="no-results">Buscando canciones...</p>';
+        const response = await fetch(`/api/spotify/?q=${encodeURIComponent(q)}`);
+        const data = await response.json();
 
-        progressBar.addEventListener('click', e => {
-            // Evitar saltos si no hay una canción cargada
-            if (!player.src) return;
-
-            // Si el archivo aún no cargó la metadata (duración), espera al evento
-            if (isNaN(player.duration) || player.duration === 0) {
-                player.addEventListener('loadedmetadata', function seekOnReady() {
-                    const rect = progressBar.getBoundingClientRect();
-                    const offsetX = e.clientX - rect.left;
-                    const newTime = (offsetX / rect.width) * player.duration;
-                    player.currentTime = newTime;
-                    player.removeEventListener('loadedmetadata', seekOnReady);
-                });
-            } else {
-                // Si la metadata ya está disponible, busca inmediatamente
-                const rect = progressBar.getBoundingClientRect();
-                const offsetX = e.clientX - rect.left;
-                const newTime = (offsetX / rect.width) * player.duration;
-                player.currentTime = newTime;
-            }
-        });
-
-
-        // 🔊 Volumen
-        volumeSlider.addEventListener('input', () => {
-            player.volume = volumeSlider.value;
-            updateVolumeIcon();
-        });
-
-        volumeIcon.addEventListener('click', () => {
-            if (player.volume > 0) {
-                lastVolume = player.volume;
-                player.volume = 0;
-                volumeSlider.value = 0;
-            } else {
-                player.volume = lastVolume || 0.8;
-                volumeSlider.value = player.volume;
-            }
-            updateVolumeIcon();
-        });
-
-        function updateVolumeIcon() {
-            if (player.volume === 0) {
-                volumeIcon.classList.replace('fa-volume-up', 'fa-volume-mute');
-            } else {
-                volumeIcon.classList.replace('fa-volume-mute', 'fa-volume-up');
-            }
+        renderSongs(data.songs || []);
         }
 
-        // 🔀 Aleatorio
-        shuffleBtn.addEventListener('click', () => {
-            isShuffle = !isShuffle;
-            shuffleBtn.style.color = isShuffle ? '#ff3b3b' : '#fff';
-            shuffleBtn.title = isShuffle ? 'Modo aleatorio activado' : 'Modo aleatorio desactivado';
+        searchBtn.addEventListener('click', searchSongs);
+        searchInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') searchSongs();
         });
-
-        // 🔁 Repetición
-        repeatBtn.addEventListener('click', () => {
-            repeatMode = (repeatMode + 1) % 3;
-            switch (repeatMode) {
-                case 0:
-                    repeatBtn.style.color = '#fff';
-                    repeatBtn.title = 'Repetición desactivada';
-                    break;
-                case 1:
-                    repeatBtn.style.color = '#9f2420';
-                    repeatBtn.title = 'Repetir canción una vez';
-                    break;
-                case 2:
-                    repeatBtn.style.color = '#ff7f50';
-                    repeatBtn.title = 'Repetir lista completa';
-                    break;
-            }
-        });
-
-        // ⏭️ Siguiente
-        nextBtn.addEventListener('click', playNext);
-        prevBtn.addEventListener('click', playPrevious);
-
-        // 🔚 Al terminar canción
-        player.addEventListener('ended', () => {
-            if (repeatMode === 1) {
-                player.currentTime = 0;
-                player.play();
-            } else if (repeatMode === 2) {
-                playNext();
-            } else if (isShuffle) {
-                playRandom();
-            } else if (currentSongIndex < songList.length - 1) {
-                playNext();
-            } else {
-                playBtn.classList.replace('fa-pause-circle', 'fa-play-circle');
-            }
-        });
-
-        // Función para siguiente canción
-        function playNext() {
-            if (songList.length === 0) return;
-
-            if (isShuffle) {
-                playRandom();
-                return;
-            }
-
-            currentSongIndex = (currentSongIndex + 1) % songList.length;
-            loadAndPlay(songList[currentSongIndex]);
-        }
-
-        // Aleatorio real (sin repetir la misma)
-        function playRandom() {
-            if (songList.length <= 1) return;
-            let randomIndex;
-            do {
-                randomIndex = Math.floor(Math.random() * songList.length);
-            } while (randomIndex === currentSongIndex);
-            currentSongIndex = randomIndex;
-            loadAndPlay(songList[currentSongIndex]);
-        }
-
-        // Anterior
-        function playPrevious() {
-            if (songList.length === 0) return;
-            if (isShuffle) {
-                playRandom();
-                return;
-            }
-            currentSongIndex = (currentSongIndex - 1 + songList.length) % songList.length;
-            loadAndPlay(songList[currentSongIndex]);
-        }
-
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${minutes}:${secs.toString().padStart(2, '0')}`;
-        }
-    });
     </script>
 
-
-
 </body>
-</html>
 </html>
