@@ -1,0 +1,91 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MusicaPalBody - Favoritos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            color:#fff;
+            background:url("{% static 'bg-image/R1.jpg' %}") center/cover fixed;
+            overflow-x:hidden;
+            font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            width:250px; height:100vh; background:rgba(0,0,0,.85);
+            padding:25px 20px; position:fixed; left:0; top:0;
+            border-right:1px solid rgba(255,255,255,.1);
+            backdrop-filter:blur(15px);
+        }
+        .nav-item { text-decoration:none; color:#ddd; display:flex; padding:10px 15px; border-radius:6px; margin-bottom:8px; }
+        .nav-item:hover { background:rgba(255,255,255,.2); color:#fff; }
+        .nav-item i { margin-right:10px; }
+        .main-content {
+            margin-left:250px; padding:30px;
+            min-height:100vh; backdrop-filter:blur(10px);
+            background:rgba(0,0,0,.4);
+        }
+        .song-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:20px; }
+        .song-card { background:rgba(255,255,255,.1); padding:10px; border-radius:10px; text-align:center; }
+        .song-card img { width:100%; border-radius:8px; height:160px; object-fit:cover; }
+        .remove-btn { margin-top:8px; padding:6px 8px; background:#d9534f; border:none; border-radius:5px; color:#fff; cursor:pointer; }
+        .remove-btn:hover { background:#c9302c; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">MusicaPalBody</div>
+        <a href="{% url 'home' %}" class="nav-item"><i class="fa fa-home"></i> Home</a>
+        <a href="{% url 'favorites' %}" class="nav-item"><i class="fa fa-heart"></i> Favoritos</a>
+        <a href="{% url 'playlists' %}" class="nav-item"><i class="fa fa-list"></i> Playlists</a>
+        <a href="{% url 'profile' %}" class="nav-item"><i class="fa fa-user"></i> Perfil</a>
+    </div>
+
+    <main class="main-content">
+        <h1>❤️ Favoritos</h1>
+        <div id="favList" class="song-grid"></div>
+        <p id="emptyMsg" style="display:none;">No tienes canciones en favoritos.</p>
+    </main>
+
+<script>
+    let favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+
+    function renderFavorites() {
+        const cont = document.getElementById("favList");
+        const empty = document.getElementById("emptyMsg");
+
+        cont.innerHTML = "";
+
+        if (!favorites.length) {
+            empty.style.display = "block";
+            return;
+        }
+
+        empty.style.display = "none";
+
+        favorites.forEach((song, index) => {
+            cont.innerHTML += `
+                <div class="song-card">
+                    <img src="${song.cover}">
+                    <h4>${song.title}</h4>
+                    <p>${song.artist}</p>
+                    <button class="remove-btn" onclick="removeFavorite(${index})">Eliminar</button>
+                </div>
+            `;
+        });
+    }
+
+    function removeFavorite(i) {
+        favorites.splice(i, 1);
+        localStorage.setItem("favorites", JSON.stringify(favorites));
+        renderFavorites();
+    }
+
+    renderFavorites();
+</script>
+
+</body>
+</html>

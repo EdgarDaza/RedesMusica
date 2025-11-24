@@ -4,224 +4,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MusicaPalBody - Login/Signup</title>
+    <title>MusicaPalBody - Iniciar Sesión</title>
+
     <style>
-        /* Estilos Generales */
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px 0; /* algo de espacio en móviles */
-            background-color: #000; /* Fondo negro */
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center; /* Centrar verticalmente todo el contenido */
-            min-height: 100vh;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 450px; /* Ancho máximo para simular la vista móvil */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Sección de la imagen (Silueta) */
-        .image-section {
-            width: 100%;
-            height: 350px; /* Altura aproximada de la imagen en la parte superior */
-            /* Fondo usando la imagen R1.jpg desde static. Se mantiene un overlay degradado encima para legibilidad. */
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 50%), url("{% static 'bg-image/R1.jpg' %}");
-            background-size: cover;
-            background-position: center center;
-            background-repeat: no-repeat;
-            position: relative;
-            overflow: hidden;
+            background: url("{% static 'bg-image/R1.jpg' %}") center/cover fixed;
+            font-family: 'Segoe UI', sans-serif;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
-        }
-
-        .silhouette {
-            width: 50%;
-            height: 80%;
-            background-color: rgba(255, 255, 255, 0.05); /* Simulación de la silueta oscura */
-            margin-top: 15px;
-            /* Estilo para darle una forma muy simple de silueta (opcional) */
-            border-radius: 50% 50% 0 0 / 70% 70% 0 0; 
-            box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
-        }
-
-        /* Título */
-        .title {
-            font-size: 2.5em;
-            font-weight: bold;
-            text-align: center;
-            padding: 20px 0;
-            margin: 0;
-            width: 90%;
-            box-sizing: border-box;
-        }
-
-        /* Controles (Formulario de login) */
-        .controls {
-            width: 90%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espacio entre los elementos */
-            padding-top: 10px;
-        }
-
-        .login-form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .login-form label {
-            font-size: 0.9rem;
-            margin-bottom: 6px;
-            color: #ddd;
-        }
-
-        .login-form input[type="text"],
-        .login-form input[type="password"],
-        .login-form input[type="tel"] {
-            padding: 14px 18px;
-            border-radius: 28px; /* estilo redondeado similar a los botones del inicio */
-            border: 1px solid rgba(255,255,255,0.12);
-            background: rgba(255,255,255,0.03);
-            color: #fff;
-            outline: none;
-            font-size: 1.05rem;
-        }
-
-        .login-form input::placeholder {
-            color: rgba(255,255,255,0.5);
-        }
-
-        /* Hacer que los inputs se vean más como los botones grandes del diseño inicial */
-        .login-form .field-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .button {
-            display: inline-flex;
             justify-content: center;
             align-items: center;
-            padding: 12px 18px;
-            border-radius: 50px; /* Bordes redondeados del botón */
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.2s;
-            cursor: pointer;
-            border: none;
-            background-color: #9f2420;
-            color: #fff;
+            min-height: 100vh;
+            color: white;
         }
 
-        .button:hover {
-            background-color: #b92a25;
-        }
-
-        /* Estilos específicos de los botones */
-
-        /* Botón principal: Sign up free (Rojo oscuro) */
-        .button.primary {
-            background-color: #9f2420; /* Rojo oscuro similar al de la imagen */
-            color: #fff;
-            border: none;
-        }
-
-        .button.primary:hover {
-            background-color: #b92a25;
-        }
-
-        /* Botones secundarios (Con iconos) */
-        .button.secondary {
-            background-color: transparent;
-            color: #fff;
-            border-color: rgba(255, 255, 255, 0.3); /* Contorno blanco semitransparente */
-            padding: 15px 20px;
-            box-sizing: border-box;
-        }
-
-        .button.secondary:hover {
-            border-color: rgba(255, 255, 255, 0.6);
-            background-color: rgba(255, 255, 255, 0.05);
-        }
-
-        /* Iconos (Simulados con texto o emojis, ya que no se usan imágenes) */
-        .icon {
-            margin-right: 10px;
-            font-size: 1.2em; /* Tamaño del icono */
-        }
-
-        .icon.phone { content: '\1F4F1'; } /* Emoji de teléfono */
-        .icon.google { color: #4285F4; } /* Color de Google */
-        .icon.facebook { color: #1877F2; } /* Color de Facebook */
-
-        /* Log in link */
-        .login-link {
+        /* Contenedor principal con efecto vidrio */
+        .login-container {
+            width: 90%;
+            max-width: 420px;
+            padding: 35px 35px; 
+            border-radius: 18px;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 25px rgba(0,0,0,0.5);
             text-align: center;
-            padding: 30px 0;
         }
 
-        .login-link a {
-            color: #fff;
+        .title {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+
+        /* Inputs */
+        .input-group {
+            text-align: left;
+            margin-bottom: 18px;
+            padding: 0 5px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(255,255,255,0.11);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: white;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #1db954;
+            box-shadow: 0 0 12px rgba(29,185,84,0.5);
+        }
+
+        /* Botón */
+        .btn-login {
+            width: 100%;
+            background: #1db954;
+            border: none;
+            padding: 15px 0;
+            margin-top: 10px;
+            border-radius: 10px;
+            font-size: 17px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-login:hover {
+            background: #1ed760;
+            transform: translateY(-2px);
+        }
+
+        /* Enlace de registro */
+        .register-text {
+            margin-top: 20px;
+            font-size: 15px;
+            opacity: 0.8;
+        }
+
+        .register-text a {
+            color: #1db954;
             text-decoration: none;
             font-weight: bold;
-            opacity: 0.8;
-            transition: opacity 0.3s;
         }
 
-        .login-link a:hover {
-            opacity: 1;
+        .register-text a:hover {
+            text-decoration: underline;
         }
+
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <div class="image-section">
-            <div class="silhouette"></div>
-        </div>
+
+    <div class="login-container">
 
         <h1 class="title">MusicaPalBody</h1>
 
-        <div class="controls">
-            <form method="post" action="{% url 'login' %}" class="login-form">
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
 
-                {% csrf_token %}
-                <div>
-                    <label for="username">Usuario</label>
-                    <input id="username" name="username" type="text" placeholder="Tu usuario" required />
-                </div>
+            <div class="input-group">
+                <label for="username">Usuario</label>
+                <input id="username" name="username" type="text" placeholder="Tu usuario" required>
+            </div>
 
-                <div>
-                    <label for="password">Contraseña</label>
-                    <input id="password" name="password" type="password" placeholder="Tu contraseña" required />
-                </div>
+            <div class="input-group">
+                <label for="password">Contraseña</label>
+                <input id="password" name="password" type="password" placeholder="Tu contraseña" required>
+            </div>
 
-                <div class="field-wrap">
-                    <label for="phone">Número de teléfono</label>
-                    <input id="phone" name="phone" type="tel" inputmode="tel" placeholder="+34 612 345 678" pattern="[0-9+ \-()]{7,}" />
-                </div>
+            <button type="submit" class="btn-login">Iniciar Sesión</button>
+        </form>
 
-                <div>
-                    <button type="submit" class="button primary">Iniciar sesión</button>
-                </div>
-            </form>
+        <div class="register-text">
+            ¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate aquí</a>
         </div>
 
-        <div class="login-link">
-            ¿No tienes cuenta? <a href="{% url 'register' %}">Regístrate</a>
-        </div>
     </div>
+
 </body>
 </html>

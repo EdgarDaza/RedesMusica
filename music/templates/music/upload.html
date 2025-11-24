@@ -1,32 +1,32 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Subir canción</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <style>
-    body{background:#000;color:#fff;font-family:Arial, sans-serif;padding:24px}
-    .card{max-width:520px;margin:0 auto;background:rgba(255,255,255,0.08);padding:20px;border-radius:12px}
-    input,button{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);margin:8px 0;background:rgba(255,255,255,0.06);color:#fff}
-    button{background:#9f2420;border:none;font-weight:bold;cursor:pointer}
-    a{color:#fff;text-decoration:none}
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h2>Subir nueva canción</h2>
-    <form method="post" enctype="multipart/form-data">
-      {% csrf_token %}
-      <input type="text" name="title" placeholder="Título (opcional)">
-      <input type="text" name="artist" placeholder="Artista (opcional)">
-      <label>Archivo de audio (mp3/wav)</label>
-      <input type="file" name="file" accept="audio/*" required>
-      <label>Portada (opcional)</label>
-      <input type="file" name="cover" accept="image/*">
-      <button type="submit">Subir</button>
-    </form>
-    <p style="text-align:center;margin-top:8px"><a href="{% url 'home' %}">← Volver</a></p>
-  </div>
-</body>
+    <head>
+    <meta charset="UTF-8">
+    <title>Subir canción</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+        body{background:#000;color:#fff;font-family:Arial, sans-serif;padding:24px}
+        .card{max-width:520px;margin:0 auto;background:rgba(255,255,255,0.08);padding:20px;border-radius:12px}
+        input,button{width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.2);margin:8px 0;background:rgba(255,255,255,0.06);color:#fff}
+        button{background:#9f2420;border:none;font-weight:bold;cursor:pointer}
+        a{color:#fff;text-decoration:none}
+    </style>
+    </head>
+    <body>
+    <div class="card">
+        <h2>Subir nueva canción</h2>
+        <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Título (opcional)">
+        <input type="text" name="artist" placeholder="Artista (opcional)">
+        <label>Archivo de audio (mp3/wav)</label>
+        <input type="file" name="file" accept="audio/*" required>
+        <label>Portada (opcional)</label>
+        <input type="file" name="cover" accept="image/*">
+        <button type="submit">Subir</button>
+        </form>
+        <p style="text-align:center;margin-top:8px"><a href="{% url 'home' %}">← Volver</a></p>
+    </div>
+    </body>
 </html>

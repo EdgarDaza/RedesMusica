@@ -1,0 +1,208 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MusicaPalBody - Playlists</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background:url("{% static 'bg-image/R1.jpg' %}") center/cover fixed;
+            font-family:'Segoe UI', sans-serif;
+            color:white;
+            overflow-x:hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width:250px; height:100vh; background:rgba(0,0,0,.85);
+            padding:25px 20px; position:fixed; left:0; top:0;
+            border-right:1px solid rgba(255,255,255,.1);
+            backdrop-filter:blur(15px);
+        }
+        .nav-item {
+            color:#ddd; text-decoration:none; display:flex;
+            padding:10px 15px; border-radius:6px; margin-bottom:8px;
+        }
+        .nav-item:hover {
+            background:rgba(255,255,255,.2); color:#fff;
+        }
+        .nav-item i { margin-right:10px; }
+
+        /* MAIN */
+        .main-content {
+            margin-left:250px; padding:30px;
+            min-height:100vh; background:rgba(0,0,0,.45);
+            backdrop-filter:blur(10px);
+        }
+
+        /* PLAYLIST CARDS */
+        .playlist-grid {
+            display:grid; grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+            gap:20px; margin-top:20px;
+        }
+        .playlist-card {
+            background:rgba(255,255,255,.1);
+            padding:15px; border-radius:10px; text-align:center;
+        }
+        .playlist-card h3 { margin-bottom:10px; }
+
+        .btn {
+            padding:6px 10px; border:none; border-radius:6px;
+            cursor:pointer; margin-top:8px;
+        }
+        .open-btn { background:#1db954; color:white; }
+        .open-btn:hover { background:#1ed760; }
+        .delete-btn { background:#d9534f; color:white; }
+        .delete-btn:hover { background:#c9302c; }
+
+        /* PLAYLIST SONG LIST */
+        #playlistView { margin-top:20px; }
+
+        .song-row {
+            display:flex; align-items:center;
+            background:rgba(255,255,255,.1);
+            padding:10px 15px; margin-bottom:10px;
+            border-radius:8px;
+        }
+        .song-row img {
+            width:55px; height:55px; border-radius:6px; margin-right:15px;
+            object-fit:cover;
+        }
+        .song-info { flex:1; }
+        .song-title { font-size:15px; font-weight:bold; }
+        .song-artist { font-size:13px; opacity:.8; }
+        .remove-song-btn {
+            background:#d9534f; color:white; border:none;
+            padding:8px 12px; border-radius:6px; cursor:pointer;
+        }
+        .remove-song-btn:hover { background:#c9302c; }
+
+        /* FLOATING BACK BUTTON */
+        .floating-back {
+            position: fixed;
+            top: 20px;
+            left: 280px;
+            width: 45px;
+            height: 45px;
+            background: #1db954;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: .2s;
+        }
+        .floating-back:hover {
+            transform: scale(1.1);
+            background:#1ed760;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="logo">MusicaPalBody</div>
+        <a href="{% url 'home' %}" class="nav-item"><i class="fa fa-home"></i> Home</a>
+        <a href="{% url 'favorites' %}" class="nav-item"><i class="fa fa-heart"></i> Favoritos</a>
+        <a href="{% url 'playlists' %}" class="nav-item"><i class="fa fa-list"></i> Playlists</a>
+        <a href="{% url 'profile' %}" class="nav-item"><i class="fa fa-user"></i> Perfil</a>
+    </div>
+
+    <!-- FLOATING BUTTON -->
+    <button id="backBtn" class="floating-back" onclick="closePlaylist()">
+        <i class="fas fa-arrow-left"></i>
+    </button>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <h1>📂 Playlists</h1>
+
+        <!-- LISTA DE PLAYLISTS -->
+        <div id="playlists" class="playlist-grid"></div>
+
+        <!-- VISTA INTERNA DE UNA PLAYLIST -->
+        <div id="playlistView" style="display:none;">
+            <h2 id="plTitle"></h2>
+            <div id="plSongs"></div>
+        </div>
+
+    </main>
+
+<script>
+    let playlists = JSON.parse(localStorage.getItem("playlists") || "[]");
+
+    function renderPlaylists() {
+        const cont = document.getElementById("playlists");
+        cont.innerHTML = "";
+
+        playlists.forEach((p, i) => {
+            cont.innerHTML += `
+                <div class="playlist-card">
+                    <h3>${p.name}</h3>
+                    <p>${p.songs.length} canciones</p>
+                    <button class="btn open-btn" onclick="openPlaylist(${i})">Abrir</button>
+                    <button class="btn delete-btn" onclick="deletePlaylist(${i})">Eliminar</button>
+                </div>
+            `;
+        });
+    }
+
+    function openPlaylist(i) {
+        document.getElementById("playlists").style.display = "none";
+        const view = document.getElementById("playlistView");
+        view.style.display = "block";
+
+        document.getElementById("backBtn").style.display = "flex";
+
+        const pl = playlists[i];
+        document.getElementById("plTitle").innerText = "Playlist: " + pl.name;
+
+        const cont = document.getElementById("plSongs");
+        cont.innerHTML = "";
+
+        pl.songs.forEach((song, idx) => {
+            cont.innerHTML += `
+                <div class="song-row">
+                    <img src="${song.cover}">
+                    <div class="song-info">
+                        <div class="song-title">${song.title}</div>
+                        <div class="song-artist">${song.artist}</div>
+                    </div>
+                    <button class="remove-song-btn" onclick="removeSong(${i}, ${idx})">Eliminar</button>
+                </div>
+            `;
+        });
+    }
+
+    function closePlaylist() {
+        document.getElementById("playlistView").style.display = "none";
+        document.getElementById("playlists").style.display = "grid";
+        document.getElementById("backBtn").style.display = "none";
+    }
+
+    function deletePlaylist(i) {
+        playlists.splice(i, 1);
+        localStorage.setItem("playlists", JSON.stringify(playlists));
+        renderPlaylists();
+    }
+
+    function removeSong(plIndex, songIndex) {
+        playlists[plIndex].songs.splice(songIndex, 1);
+        localStorage.setItem("playlists", JSON.stringify(playlists));
+        openPlaylist(plIndex);
+    }
+
+    renderPlaylists();
+</script>
+
+</body>
+</html>

@@ -9,9 +9,9 @@ from .models import Song
 import os
 from django.http import JsonResponse
 from dotenv import load_dotenv
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
-
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 
@@ -105,37 +105,56 @@ def upload_song(request):
 
     return render(request, 'music/upload.html')
 
-load_dotenv()  # Carga las variables del archivo .env
+load_dotenv()
 
-def spotify_search(request):
-    query = request.GET.get('q')
-    if not query:
-        return JsonResponse({'error': 'Missing search parameter ?q='}, status=400)
 
-    # Autenticación con Spotify
-    sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(
-        client_id=os.getenv('SPOTIFY_CLIENT_ID'),
-        client_secret=os.getenv('SPOTIFY_CLIENT_SECRET')
-    ))
+def deezer_search(request):
+    q = request.GET.get("q")
+    if not q:
+        return JsonResponse({"error": "Missing q param"}, status=400)
 
-    results = sp.search(q=query, type='track', limit=20)
+    url = f"https://api.deezer.com/search?q={q}"
+    r = requests.get(url).json()
 
     songs = []
-    for track in results['tracks']['items']:
-        # ⚠️ Filtrar solo canciones con preview disponible
-        if not track['preview_url']:
-            continue
-
+    for item in r.get("data", []):
         songs.append({
-            'title': track['name'],
-            'artist': track['artists'][0]['name'],
-            'cover': track['album']['images'][0]['url'] if track['album']['images'] else '',
-            'preview_url': track['preview_url'],
-            'spotify_url': track['external_urls']['spotify'],
+            "title": item["title"],
+            "artist": item["artist"]["name"],
+            "cover": item["album"]["cover_medium"],
+            "preview_url": item["preview"],
+            "deezer_url": item["link"]
         })
 
-    # Si no hay canciones válidas, informar
-    if not songs:
-        return JsonResponse({'songs': [], 'message': 'No songs with preview available'}, status=200)
+    return JsonResponse({"songs": songs})
 
-    return JsonResponse({'songs': songs})
+
+def favorites(request):
+    return render(request, 'music/favorites.html')
+
+def playlists_view(request):
+    return render(request, 'music/playlists.html')
+
+def profile_view(request):
+    return render(request, 'music/profile.html')
+
+@csrf_exempt
+@login_required(login_url='login')
+def update_profile(request):
+    if request.method == "POST":
+        new_username = request.POST.get("username")
+        new_email = request.POST.get("email")
+
+        user = request.user
+
+        # Verificar si el username ya existe y no es el mismo usuario
+        if User.objects.filter(username=new_username).exclude(id=user.id).exists():
+            return JsonResponse({"status": "error", "message": "Este nombre de usuario ya está en uso."})
+
+        user.username = new_username
+        user.email = new_email
+        user.save()
+
+        return JsonResponse({"status": "success"})
+    
+    return JsonResponse({"status": "error", "message": "Método no permitido"})
