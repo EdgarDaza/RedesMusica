@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-#5273sead+u6qj&atyg5pl)6i-#a0n_i(1fq8-kwdq=-)4bgz(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["100.121.53.106","127.0.0.1","192.168.33.12","192.168.40.118","musicserver.mico"]
 
 
 # Application definition
