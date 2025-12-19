@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -102,7 +103,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('imagen.jpg'); /* Se usa la imagen original para el fondo */
+            background-image: url('{% static 'bg-image/R1.jpg' %}'); /* Se usa la imagen original para el fondo */
             background-size: cover;
             background-position: center;
             opacity: 0.3; /* Oscurecer la imagen de fondo */

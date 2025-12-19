@@ -23,9 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-#5273sead+u6qj&atyg5pl)6i-#a0n_i(1fq8-kwdq=-)4bgz('
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ["100.121.53.106","127.0.0.1","192.168.33.12","192.168.40.118","musicserver.mico"]
+ALLOWED_HOSTS = ["100.121.53.106","192.168.30.12","musica.grupo2.local",
+		 "127.0.0.1","localhost"]
 
 
 # Application definition
@@ -118,7 +119,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+STATICFILES_DIRS = [
+    BASE_DIR / 'music' / 'static',
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
